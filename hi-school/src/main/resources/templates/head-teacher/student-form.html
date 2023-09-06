@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Form</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container mt-5">
+  <div th:if="${successMessage}" class="alert alert-success text-center" id="successMessage">
+    <p th:text="${successMessage}"></p>
+    <hr>
+    <a sec:authorize="hasRole('MANAGER')" class="btn btn-primary"
+       th:href="@{/student/manager/list}">Back to Student List</a>
+    <hr>
+    <a sec:authorize="hasRole('HEADTEACHER')" class="btn btn-primary"
+       th:href="@{/student/head-teacher/list}">Back to Student List</a>
+  </div>
+
+  <h2 class="mb-4 text-center">Student Form</h2>
+  <form th:action="@{/student/save}" th:object="${student}" method="post"
+        enctype="multipart/form-data">
+    <input type="hidden" th:field="*{studentId}"/>
+    <div class="mb-3">
+      <label for="avatar" class="form-label">Avatar:</label>
+      <img th:if="${student.avatar != null}"
+           th:src="@{/avatar/{studentId}(studentId=${student.studentId})}"
+           alt="Avatar" style="max-width: 200px;" class="img-fluid mb-3"/>
+      <input type="file" class="form-control" id="avatar" name="avatarFile" accept="image/*" />
+      <input type="hidden" name="uploadAvatar" value="true"/>
+    </div>
+
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Full Name:</label>
+      <input type="text" class="form-control" id="fullName" th:field="*{fullName}"
+             placeholder="Full Name" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+      <input type="date" class="form-control" id="dateOfBirth" th:field="*{dateOfBirth}"
+             placeholder="Date of Birth" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="nationality" class="form-label">Nationality:</label>
+      <input type="text" class="form-control" id="nationality" th:field="*{nationality}"
+             placeholder="Nationality" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="ethnicity" class="form-label">Ethnicity:</label>
+      <input type="text" class="form-control" id="ethnicity" th:field="*{ethnicity}"
+             placeholder="Ethnicity" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="citizenId" class="form-label">Citizen ID:</label>
+      <input type="text" class="form-control" id="citizenId" th:field="*{citizenId}"
+             placeholder="Citizen ID"
+             required pattern="\d{12}" title="Enter a valid phone number (e.g., 001090001002)"/>
+    </div>
+
+    <div class="mb-3">
+      <label for="issuedDate" class="form-label">Issued Date:</label>
+      <input type="date" class="form-control" id="issuedDate" th:field="*{issuedDate}"
+             placeholder="Issued Date" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="issuedPlace" class="form-label">Issued Place:</label>
+      <input type="text" class="form-control" id="issuedPlace" th:field="*{issuedPlace}"
+             placeholder="Issued Place" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="permanentAddress" class="form-label">Permanent Address:</label>
+      <input type="text" class="form-control" id="permanentAddress" th:field="*{permanentAddress}"
+             placeholder="Permanent Address" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="contactAddress" class="form-label">Contact Address:</label>
+      <input type="text" class="form-control" id="contactAddress" th:field="*{contactAddress}"
+             placeholder="Contact Address" required/>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input type="text" class="form-control" id="email" th:field="*{email}"
+             required pattern="^\S+@\S+\.\S+$"
+             title="Enter a valid email address (e.g., example@email.com)"/>
+    </div>
+    <div th:if="${errorMessageEdit}" class="alert alert-danger text-center">
+      <p th:text="${errorMessageEdit}"></p>
+      <a sec:authorize="hasAnyRole('ADMIN','MANAGER','HEADTEACHER')"
+         class="btn btn-primary"
+         th:href="@{/student/edit/{id}(id=${student.studentId})}">Refresh</a>
+    </div>
+    <div th:if="${errorMessageCreate}" class="alert alert-danger text-center">
+      <p th:text="${errorMessageCreate}"></p>
+    </div>
+    <div class="mb-3">
+      <label for="school" class="form-label">School:</label>
+      <select class="form-select" id="school" th:field="*{school}" required>
+<!--        <option value="">Select School</option>-->
+        <option th:each="school : ${allSchools}" th:value="${school.schoolId}"
+                th:text="${school.schoolName}"></option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="parent" class="form-label" style="color:red">
+        *Parent(AUTOMATICALLY CREATE - NO SELECTION)</label>
+      <select class="form-select" id="parent" th:field="*{parent}">
+        <option value="">Select Parent </option>
+        <option th:each="parent : ${allParents}" th:value="${parent.parentId}"
+                th:text="${parent.fullName}"></option>
+      </select>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="transcript" class="form-label" style="color:red">
+        *Transcript(AUTOMATICALLY CREATE - NO SELECTION)</label>
+      <select class="form-select" id="transcript" th:field="*{transcripts}" multiple="multiple">
+        <option value="" disabled>Select Parent</option>
+        <option th:each="transcript : ${allTranscripts}" th:value="${transcript.transcriptId}"
+                th:text="${transcript.transcriptId}"></option>
+      </select>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" onclick="return confirmAction('save')">Save
+      </button>
+      <hr>
+      <a sec:authorize="hasRole('MANAGER')" class="btn btn-primary"
+         th:href="@{/student/manager/list}">Back to Student List</a>
+      <hr>
+      <a sec:authorize="hasRole('HEADTEACHER')" class="btn btn-primary"
+         th:href="@{/student/head-teacher/list}">Back to Student List</a>
+    </div>
+  </form>
+
+  <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+
+  </script>
+
+</div>
+</body>
+</html>

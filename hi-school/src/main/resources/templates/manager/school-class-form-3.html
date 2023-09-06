@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>School Class Form</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container">
+  <h2 class="mt-4 text-center">School Class Form</h2>
+  <form th:action="@{/school-class/save-edit}" th:object="${schoolClass}" method="post">
+
+    <input type="hidden" th:field="*{classId}"/>
+    <div class="mb-3">
+      <label for="className" class="form-label">Class Name:</label>
+      <input type="text" class="form-control" id="className" th:field="*{className}"/>
+    </div>
+
+    <div class="form-group">
+      <label>Current Students:</label>
+      <div class="student-list">
+        <div class="list-group">
+          <div th:each="student : *{students}">
+            <label class="list-group-item list-group-item-action">
+              <input type="checkbox" name="currentStudents" th:value="${student.studentId}" class="form-check-input me-2"  readonly disabled/>
+              <span th:text="${student.fullName + ' ( ' + student.citizenId + ')'}"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Select Students:</label>
+      <div class="list-group">
+        <div th:each="student : ${studentsNotInClass}">
+          <div class="list-group-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="students" th:value="${student.studentId}" th:id="${'studentCheck_' + student.studentId}" />
+              <label class="form-check-label" th:for="${'studentCheck_' + student.studentId}" th:text="${student.fullName + ' (' + student.citizenId + ')'}"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="mb-3">
+      <label class="form-label" style="color:red"
+      >Head Teacher(NO SELECTION):</label>
+      <select class="form-select" th:field="*{teacher}" required>
+        <option th:each="teacher : ${teachersNotInClass}" th:value="${teacher.teacherId}"
+                th:text="${teacher.fullName + '('+ teacher.email+')'}"></option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">School Year:</label>
+      <select class="form-select" th:field="*{schoolYear}" required>
+        <option th:each="schoolYear : ${allSchoolYears}"
+                th:value="${schoolYear.schoolYearId}"
+                th:text="${schoolYear.schoolYearName}"></option>
+      </select>
+    </div>
+    <div th:if="${error}" class="alert alert-danger text-center">
+      <p th:text="${error}"></p>
+      <a class="btn btn-success" th:href="@{/school-class/school-year-selection}">Refresh</a>
+
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary" onclick="return confirmAction('save')">Save
+      </button>
+      <hr>
+      <a class="btn btn-secondary mt-2" th:href="@{/school-class/school-classes}">Back to School
+        Class List</a>
+    </div>
+  </form>
+</div>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+
+</script>
+</body>
+</html>

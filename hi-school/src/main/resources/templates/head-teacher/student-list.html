@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student List</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Student List</h2>
+  <hr>
+  <div class="text-center">
+    <a sec:authorize="hasAnyRole('ADMIN','MANAGER')"
+       class="btn btn-success" href="/student/form">Create New Student</a>
+  </div>
+</div>
+
+    <div class="table-responsive mx-5">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Avatar</th>
+        <th>Full Name</th>
+        <th>Date of Birth</th>
+        <th>Nationality</th>
+        <th>Ethnicity</th>
+        <th>Citizen ID</th>
+        <th>Issued Date</th>
+        <th>Issued Place</th>
+        <th>Permanent Address</th>
+        <th>Contact Address</th>
+        <th>Email</th>
+        <th>Parent</th>
+        <th>School</th>
+        <th>Transcript</th>
+        <th>School Class</th>
+        <th colspan="2" class="text-center"
+            sec:authorize="hasAnyRole('ADMIN','MANAGER','HEADTEACHER')">Action
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="student : ${students}">
+        <td th:text="${student.studentId}"></td>
+        <td>
+          <img th:src="@{/avatar/{studentId}(studentId=${student.studentId})}" alt="Avatar"
+               style="max-width: 200px; max-height: 200px;">
+        </td>
+        <td th:text="${student.fullName}"></td>
+        <td th:text="${student.dateOfBirth}"></td>
+        <td th:text="${student.nationality}"></td>
+        <td th:text="${student.ethnicity}"></td>
+        <td th:text="${student.citizenId}"></td>
+        <td th:text="${student.issuedDate}"></td>
+        <td th:text="${student.issuedPlace}"></td>
+        <td th:text="${student.permanentAddress}"></td>
+        <td th:text="${student.contactAddress}"></td>
+        <td th:text="${student.email != null ? student.email : 'N/A'}"></td>
+        <td th:text="${student.parent != null ? student.parent.fullName : 'N/A'}"></td>
+        <td th:text="${student.school != null ? student.school.schoolName : 'N/A'}"></td>
+        <td>
+          <ul>
+            <li th:each="transcript : ${student.transcripts}">
+              <span th:text="${transcript.transcriptId}"></span>
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li th:each="schoolClass : ${student.schoolClasses}"
+                th:text="${schoolClass.className + '('+ schoolClass.schoolYear.schoolYearName + ')'}"></li>
+          </ul>
+        </td>
+        <td>
+          <a sec:authorize="hasAnyRole('ADMIN','MANAGER','HEADTEACHER')"
+             class="btn btn-primary"
+             th:href="@{/student/edit/{id}(id=${student.studentId})}">Edit</a>
+        </td>
+        <td>
+          <a sec:authorize="hasAnyRole('ADMIN','MANAGER')"
+             class="btn btn-danger" th:href="@{/student/delete/{id}(id=${student.studentId})}"
+             onclick="return confirmAction('delete')">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="text-center">
+      <hr>
+      <a class="btn btn-primary" th:href="@{/checkUserRole}">Back to Home</a>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+</script>
+</body>
+</html>

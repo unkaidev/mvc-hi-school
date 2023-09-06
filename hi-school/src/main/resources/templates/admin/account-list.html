@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi-School</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container">
+  <div class="text-center">
+    <h1>Account List</h1>
+  </div>
+  <div class="text-center">
+    <a class="btn btn-success mr-2" th:href="@{/account/account-form}">Add New Account</a>
+    <a class="btn btn-warning" th:href="@{/account/addAccountsForStudents}"
+       onclick="return confirmAction('ADD MANY ACCOUNTS')"
+    >Add New Account For All New Student</a>
+    <a class="btn btn-secondary" th:href="@{/account/addAccountsForTeachers}"
+       onclick="return confirmAction('ADD MANY ACCOUNTS')"
+    >Add New Account For All New Teacher</a>
+    <hr>
+    <a class="btn btn-primary" th:href="@{/checkUserRole}">Back to Home</a>
+  </div>
+  <form th:action="@{/account/search-list}" method="get">
+    <input type="text" name="search" placeholder="Search By Username">
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="table">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Active</th>
+        <th>Role</th>
+        <th>Student Name</th>
+        <th>Teacher Name</th>
+        <th colspan="2" class="text-center">Email</th>
+        <th colspan="2" class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="account : ${accounts}">
+        <td th:text="${account.id}"></td>
+        <td th:text="${account.userName}"></td>
+        <td th:text="${account.password}"></td>
+        <td th:text="${account.active}"></td>
+        <td>
+          <span th:each="role : ${account.roles}" th:text="${role.name} + ' '"></span>
+        </td>
+        <td th:text="${account.student != null ? account.student.fullName : ''}"></td>
+        <td th:text="${account.teacher != null ? account.teacher.fullName : ''}"></td>
+        <td th:text="${account.student != null ? account.student.email : ''}"></td>
+        <td th:text="${account.teacher != null ? account.teacher.email : ''}"></td>
+        <td>
+          <a class="btn btn-primary"
+             th:href="@{/account/edit-account/{id}(id=${account.id})}">Edit</a>
+
+        </td>
+        <td>
+          <a class="btn btn-danger"
+             th:href="@{/account/delete-account/{id}(id=${account.id})}"
+             onclick="return confirmAction('delete')">Delete</a>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <br/>
+  <hr>
+
+
+</div>
+
+</div>
+
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+</script>
+</body>
+</html>

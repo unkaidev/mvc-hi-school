@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List Notifications</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" type="image/png" href="/static/images/favicon.ico" sizes="32x32">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">List of Notifications</h2>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Sender</th>
+      <th>Content</th>
+      <th>Timestamp</th>
+      <th>Status</th>
+      <th colspan="2" class="text-center">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="notification : ${notifications}">
+      <td th:text="${notification.id}"></td>
+      <td th:text="${notification.sender.userName}"></td>
+      <td>
+        <span
+            th:text="${notification.content.length() > 50 ? notification.content.substring(0, 50) : notification.content}"></span>
+        <button th:if="${notification.content.length() > 50}" type="button"
+                th:attr="data-notification-id=${notification.id}"
+                class="btn btn-primary btn-sm read-more-button">
+          <i class="fas fa-eye"></i> Read Full Content
+        </button>
+      </td>
+      <td th:text="${notification.timestamp}"></td>
+      <td th:text="${notification.status}"></td>
+      <td>
+        <button th:if="${notification.status != 'READ'}" type="button"
+                th:attr="data-notification-id=${notification.id}"
+                class="btn btn-primary btn-sm mark-as-read-button">
+          <i class="fas fa-check"></i> Mark as Read
+        </button>
+      </td>
+      <td>
+        <a class="btn btn-danger"
+           th:href="@{/notifications/delete/{id}(id=${notification.id})}"
+           onclick="return confirmAction('delete')">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+
+    <hr>
+    <a class="btn btn-primary" th:href="@{/checkUserRole}">Back to Home</a>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+</script>
+<script>
+
+
+         $(document).on("click", ".mark-as-read-button", function () {
+            var notificationId = $(this).data("notification-id");
+
+            $.get("/notifications/mark-as-read/" + notificationId, function () {
+                location.reload();
+            });
+        });
+
+
+        $(document).on("click", ".read-more-button", function () {
+    var notificationId = $(this).data("notification-id");
+
+    if (!isNaN(notificationId)) {
+        $.get("/notifications/mark-as-read/" + notificationId, function () {
+            var currentWindow = window;
+            var currentDocument = document;
+            var currentCharset = currentDocument.charset;
+            var currentFontFamily = window.getComputedStyle(currentDocument.body).fontFamily;
+
+            var newTab = window.open("/notifications/show-full-content/" + notificationId, "_blank");
+
+            if (newTab) {
+                newTab.document.charset = currentCharset;
+                newTab.document.body.style.fontFamily = currentFontFamily;
+
+                location.reload();
+            } else {
+                console.error("Failed to open new tab.");
+            }
+        });
+    } else {
+        console.error("Invalid notificationId.");
+    }
+});
+
+</script>
+
+</body>
+</html>

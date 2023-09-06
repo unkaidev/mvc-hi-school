@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching Form</title>
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <h2 class="mt-4 text-center">Teaching Form</h2>
+  <form th:action="@{/teaching/save}" th:object="${teaching}" method="post">
+    <input type="hidden" th:field="*{teachingId}"/>
+    <input type="hidden" th:field="*{teacher}"/>
+    <input type="hidden" th:field="*{schoolClass}"/>
+    <input type="hidden" th:field="*{subject}"/>
+    <input type="hidden" th:field="*{schedule}"/>
+    <input type="hidden" th:field="*{teachingDate}"/>
+
+    <div class="mb-3">
+      <label for="classComment" class="form-label">Class Comment:</label>
+      <input type="text" th:field="*{classComments}" id="classComment" class="form-control"/>
+    </div>
+    <div class="text-center">
+      <button type="submit" onclick="return confirmAction('save')" class="btn btn-success">Save
+      </button>
+
+    </div>
+  </form>
+</div>
+<div class="text-center">
+  <hr>
+  <a class="btn btn-primary" th:href="@{/teaching/list}">Back to Teaching List</a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+
+
+</script>
+</body>
+</html>

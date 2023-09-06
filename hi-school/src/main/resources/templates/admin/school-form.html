@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>School Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container">
+  <div class="text-center">
+    <h2>School Form</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form th:action="@{/school/saveSchool}" th:object="${school}" method="post">
+        <input type="hidden" th:field="*{schoolId}"/>
+        <div class="mb-3">
+          <label for="schoolName" class="form-label">Name:</label>
+          <input type="text" class="form-control" id="schoolName" th:field="*{schoolName}" required/>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary" onclick="return confirmAction('save')">Save</button>
+          <a class="btn btn-secondary" th:href="@{/school/schools}">Back to School List</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+</script>
+</body>
+</html>

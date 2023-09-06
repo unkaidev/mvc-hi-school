@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Teacher Form</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container">
+  <h2 class="mt-4 text-center">Teacher Form</h2>
+  <form th:action="@{/teacher/saveTeacher}" th:object="${teacher}" method="post">
+    <input type="hidden" th:field="*{teacherId}"/>
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Full Name:</label>
+      <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required/>
+    </div>
+    <div class="mb-3">
+      <label for="phoneNumber" class="form-label">Phone Number:</label>
+      <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
+             required pattern="\d{10}" title="Enter a valid phone number (e.g., 0901234567)"/>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input type="text" class="form-control" id="email" th:field="*{email}"
+             required pattern="^\S+@\S+\.\S+$"
+             title="Enter a valid email address (e.g., example@email.com)"/>
+    </div>
+    <!-- Thông báo lỗi (nếu có) -->
+    <div th:if="${errorMessage}" class="alert alert-danger text-center">
+      <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary" onclick="return confirmAction('save')">Save
+      </button>
+      <hr>
+      <a class="btn btn-secondary mt-2" th:href="@{/teacher/teachers}">Back to Teacher List</a>
+
+    </div>
+  </form>
+
+</div>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+
+</script>
+</body>
+</html>

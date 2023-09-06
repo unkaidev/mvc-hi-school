@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi-School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+  <style>
+/* Phần container chứa biểu tượng và số lượng thông báo */
+#notification-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Biểu tượng chuông thông báo */
+.notification-icon {
+    font-size: 40px; /* Đổi kích thước biểu tượng thành 40px (hoặc kích thước mong muốn) */
+    border-radius: 50%; /* Làm tròn biểu tượng */
+    display: inline-block;
+    margin-right: 8px; /* Khoảng cách giữa biểu tượng và số lượng thông báo */
+    background-color: transparent; /* Loại bỏ nền màu đỏ */
+    color: red; /* Đổi màu của biểu tượng thành màu đỏ (hoặc màu mong muốn) */
+}
+
+/* Số lượng thông báo chưa đọc */
+.notification-count {
+    font-weight: bold; /* Chữ đậm */
+    color: white; /* Màu chữ */
+    background-color: red; /* Màu nền của số lượng thông báo */
+    padding: 3px 8px; /* Kích thước và khoảng cách nền của số lượng thông báo */
+    border-radius: 50%; /* Làm tròn số lượng thông báo */
+}
+
+/* Hiệu ứng pulsing cho biểu tượng khi có thông báo mới */
+.notification-icon-active {
+    animation: pulse 1s infinite alternate; /* Ví dụ: thêm animation pulsing */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+
+  </style>
+</head>
+<body>
+<div class="container text-center mb-3">
+  <h2>Hi-School</h2>
+  <h4>
+    <a href="/home">
+      <i class="fas fa-home"></i> Home Page
+    </a>
+  </h4>
+</div>
+
+<div class="container">
+  <div class="row justify-content-end">
+    <div class="col-6 text-end">
+      HELLO
+      <b><span sec:authentication="principal.username"></span></b>
+      <span sec:authentication="principal.authorities"></span>
+      <div class="btn-group">
+        <a href="/account/edit-password" class="btn btn-info text-decoration-none">Change
+          Password</a>
+        <form action="#" th:action="@{/logout}" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger">Log out</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr/>
+  <h4 class="text-center">MENU</h4>
+
+  <div class="container">
+    <div class="row">
+      <!-- Column 1 -->
+      <div class="col-md-6">
+        <div class="list-group">
+          <a href="/transcript/student/list"
+             class="list-group-item list-group-item-action ">VIEW TRANSCRIPT</a>
+          <a href="/student/student/list" class="list-group-item list-group-item-action ">VIEW
+            PERSONAL INFORMATION</a>
+          <a href="/parent/student/parents-list"
+             class="list-group-item list-group-item-action ">VIEW PARENT INFORMATION</a>
+        </div>
+      </div>
+      <!-- Column 2 -->
+      <div class="col-md-6">
+        <div class="list-group">
+          <a href="/score/student/list" class="list-group-item list-group-item-action ">VIEW
+            SUBJECT SCORES</a>
+          <a href="/timetable-student/list" class="list-group-item list-group-item-action ">VIEW
+            TIMETABLE</a>
+          <a href="/notifications/list" class="list-group-item list-group-item-action ">
+            VIEW NOTIFICATIONS
+            <div id="notification-container">
+              <span id="notification-icon" class="fas fa-bell"></span>
+              <span id="notification-count" class="notification-count"></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   function updateNotificationCount() {
+    $.get("/notifications/count", function (data) {
+        $("#notification-count").text(data);
+        if (data > 0) {
+            // Hiển thị biểu tượng chuông thông báo (hoặc thông báo khác) ở đây
+            $("#notification-icon").addClass("notification-icon-active");
+        } else {
+            // Ẩn biểu tượng chuông thông báo khi không có thông báo mới
+            $("#notification-icon").removeClass("notification-icon-active");
+        }
+    });
+    }
+
+        // Gọi hàm cập nhật khi trang được tải và định kỳ cập nhật sau mỗi X giây (tùy chọn)
+    $(document).ready(function () {
+        updateNotificationCount();
+        setInterval(updateNotificationCount, 30000); // Cập nhật mỗi 30 giây (tùy chọn)
+    });
+
+
+</script>
+
+</body>
+</html>

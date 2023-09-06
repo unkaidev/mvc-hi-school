@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi-School</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container text-center mb-3">
+  <h2>Hi-School</h2>
+  <h4>
+    <a href="/home">
+      <i class="fas fa-home"></i> Home Page
+    </a>
+  </h4>
+</div>
+
+<div class="container">
+  <div class="row justify-content-end">
+    <div class="col-md-6 text-end">
+      HELLO
+      <b><span sec:authentication="principal.username"></span></b>
+      <span sec:authentication="principal.authorities"></span>
+      <div class="btn-group">
+        <a href="/account/edit-password" class="btn btn-info text-decoration-none">Change
+          Password</a>
+        <form action="#" th:action="@{/logout}" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger">Log out</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr/>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="list-group">
+          <button type="button" class="list-group-item list-group-item-action active text-center">
+            MENU
+          </button>
+          <!-- For Head Teacher-->
+          <a href="/student/head-teacher/list" class="list-group-item list-group-item-action">
+            STUDENT MANAGEMENT
+          </a>
+          <a href="/parent/head-teacher/parents-list"
+             class="list-group-item list-group-item-action">
+            PARENT MANAGEMENT
+          </a>
+          <a href="/transcript/head-teacher/list" class="list-group-item list-group-item-action">
+            TRANSCRIPT MANAGEMENT
+          </a>
+          <a href="/notifications/head-teacher/send" class="list-group-item list-group-item-action ">SEND
+            NOTIFICATIONS TO STUDENTS</a>
+          <hr>
+          <!--          For Teacher-->
+          <a href="/score/list" class="list-group-item list-group-item-action">
+            SCORES MANAGEMENT
+          </a>
+          <a href="/teaching/list" class="list-group-item list-group-item-action">
+            VIEW TEACHING SCHEDULE AND ATTENDANCE
+          </a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+</html>

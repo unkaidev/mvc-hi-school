@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi-School</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+  <link rel="icon" type="image/png"
+        href="/static/images/favicon.ico"
+        sizes="32x32">
+</head>
+<body>
+<div class="container">
+  <div class="text-center">
+    <h1>Account Form</h1>
+  </div>
+  <form th:action="@{/account/saveAccount}" th:object="${account}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="mb-3">
+      <label for="userName" class="form-label">Username:</label>
+      <input type="text" class="form-control" id="userName" th:field="*{userName}" required/>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label>
+      <input type="text" class="form-control" id="password" th:field="*{password}" required/>
+    </div>
+    <div class="mb-3">
+      <label for="active" class="form-label">Active:</label>
+      <select class="form-select" id="active" th:field="*{active}">
+        <option value="true" selected>True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="roles" class="form-label">Roles:</label>
+      <select multiple="multiple" class="form-select" id="roles" th:field="*{roles}" size="3">
+        <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role.name}"/>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="student" class="form-label" style="color:red">*Student(NO SELECTION WHEN CREATE)</label>
+      <select class="form-select" id="student" th:field="*{student}">
+        <option value="">Choose a student</option>
+        <option th:each="student : ${allStudent}" th:value="${student.studentId}"
+                th:text="${student.fullName}"></option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="teacher" class="form-label" style="color:red">*Teacher(NO SELECTION WHEN CREATE)</label>
+      <select class="form-select" id="teacher" th:field="*{teacher}">
+        <option value="">Choose a teacher</option>
+        <option th:each="teacher : ${allTeacher}" th:value="${teacher.teacherId}"
+                th:text="${teacher.fullName}"></option>
+      </select>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" onclick="return confirmAction('save')">Save
+      </button>
+      <hr>
+      <a class="btn btn-primary" th:href="@{/account/account-list}">Back to Account List</a>
+
+    </div>
+  </form>
+</div>
+
+<script>
+   function confirmAction(action) {
+        return confirm("Are you sure you want to " + action + "?");
+    }
+</script>
+</body>
+</html>
