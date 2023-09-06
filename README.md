@@ -21,6 +21,7 @@ Welcome to a research-driven vision of the future of high school education in Vi
 ## ❗ Note
 
 -  Development branch contains the code for the localhost development version.
+-  For the first run, execute the code inside the comment block: //Create a default Admin account in the Account Controller.
    <br/>
    <br/>
 
