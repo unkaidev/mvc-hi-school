@@ -51,6 +51,8 @@ For any issues related to the project, raise an ISSUE in the respective Reposito
 <img height="200" width="200" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/800px-IntelliJ_IDEA_Icon.svg.png">
 <img height="200" width="200" src="https://upload.wikimedia.org/wikipedia/commons/3/32/HeidiSQL_logo_image.png">
 <img height="200" width="200" src="https://1.bp.blogspot.com/-_IX8zH83dJk/Xva8BQtk_QI/AAAAAAAAH8Y/tgNzUIYVh0U7onxYQdim8TNB5PEwlgDtQCLcBGAsYHQ/s1600/thymeleaf.png">
+<img height="200" width="200" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Xampp_logo.svg/230px-Xampp_logo.svg.png">
+
 </p>
 
 -  Library:
@@ -61,6 +63,7 @@ For any issues related to the project, raise an ISSUE in the respective Reposito
     - Spring Boot Mail
     - Spring Core
 -  Framework: Spring boot
+-  Server: Apache
 -  Database: MySQL
 -  Version Control System: Git
 -  Programming / Scripting: JavaScript
